@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width">
+        <title>Street Scenes - Remote Cue - Sound Desk</title>
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+    <body>
+        <h1>Street Scenes - Remote Cue - Sound Desk</h1>
+
+        <table class="control">
+            <tr>
+                <td class="title">Status:</td>
+                <td class="title">Messages:</td>
+            </tr>
+            <tr>
+                <td><div id="status" style="font-weight: bold;"></div></td>
+                <td>
+                    <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
+                    <button type="button" id="sendButton">Send</button>
+                    <button type="button" id="clearMsgsButton">Clear Msgs</button>
+                </td>
+            </tr>
+            <tr>
+                <td><div class="status"></div></td>
+                <td><div class="message" id="message"></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="resetButton">Reset</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="goButton">Go</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="button" class="control-button" id="fadeButton">Fade</button>
+                </td>
+                <td>
+                    <button type="button" class="control-button" id="offButton">Off</button>
+                </td>
+            </tr>
+        </table>
+
+        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+        <script type="text/javascript">
+            (function () {
+                var id = 'sound-desk';
+                var destId = '1';
+
+                var peer = null;
+                var peerId = null;
+                var conn = null;
+                var oppositePeer = {
+                    peerId: null
+                };
+                var msg = null;
+                var command = null;
+                var status = document.getElementById("status");
+                var message = document.getElementById("message");
+                var goButton = document.getElementById("goButton");
+                var resetButton = document.getElementById("resetButton");
+                var fadeButton = document.getElementById("fadeButton");
+                var offButton = document.getElementById("offButton");
+                var sendMessageBox = document.getElementById("sendMessageBox");
+                var sendButton = document.getElementById("sendButton");
+                var clearMsgsButton = document.getElementById("clearMsgsButton");
+
+                function getUrlParam(name) {
+                    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+                    var regexS = "[\\?&]" + name + "=([^&#]*)";
+                    var regex = new RegExp(regexS);
+                    var results = regex.exec(window.location.href);
+                    if (results == null)
+                        return null;
+                    else
+                        return results[1];
+                };
+
+                function ready() {
+                    // Recieve data
+                    conn.on('data', function (data) {
+                        addMessage("<span class=\"shuttleMsg\">Shuttle:</span> " + data);
+                    });
+
+                    // Handle close or error
+                    conn.on('close', function () {
+                        status.innerHTML = "Connection closed";
+                    });
+                    peer.on('disconnected', function () {
+                        alert("Connection has been lost.");
+                        peer.reconnect();
+                    });
+                    peer.on('error', function (err) {
+                        alert('' + err)
+                    });
+
+                    // Check URL for comamnds that should be sent right away
+                    command = getUrlParam("command");
+                    if (command)
+                        conn.send(command);
+
+                    var cueString = "<span class=\"cueMsg\">Cue: </span>";
+                    goButton.onclick = function () {
+                        conn.send("Go");
+                        console.log("Go signal sent");
+                        addMessage(cueString + "Go");
+                    };
+                    resetButton.onclick = function () {
+                        conn.send("Reset");
+                        console.log("Reset signal sent");
+                        addMessage(cueString + "Reset");
+                    };
+                    fadeButton.onclick = function () {
+                        conn.send("Fade");
+                        console.log("Fade signal sent");
+                        addMessage(cueString + "Fade");
+                    };
+                    offButton.onclick = function () {
+                        conn.send("Off");
+                        console.log("Off signal sent");
+                        addMessage(cueString + "Off");
+                    };
+
+                    // Listen for enter
+                    sendMessageBox.onkeypress = function (e) {
+                        var event = e || window.event;
+                        var char = event.which || event.keyCode;
+                        if (char == '13')
+                            sendButton.click();
+                    };
+                    // Send message
+                    sendButton.onclick = function () {
+                        msg = sendMessageBox.value;
+                        sendMessageBox.value = "";
+                        conn.send(msg);
+                        console.log("Sent: " + msg)
+                        addMessage("<span class=\"soundMsg\">Sound:</span> " + msg);
+                    };
+                    // Clear messages box
+                    clearMsgsButton.onclick = function () {
+                        clearMessages();
+                    };
+                };
+
+                function initialize() {
+                    peer = new Peer(id, { key: 'iw23v27zu4qme7b9', debug: 2 });
+
+                    peer.on('open', function (id) {
+                        peerId = id;
+                        console.log('ID: ' + id);
+                    });
+                    peer.on('error', function (err) {
+                        if (err.type === 'unavailable-id') {
+                            alert('' + err);
+                            peer.reconnect();
+                        }
+                        else
+                            alert('' + err);
+                    });
+                };
+
+                function join() {
+                    initialize();
+                    peer.on('open', function () {
+                        conn = peer.connect(destId, {
+                            key: 'iw23v27zu4qme7b9',
+                            reliable: true
+                        });
+                        conn.on('open', function () {
+                            oppositePeer.peerId = destId;
+                            status.innerHTML = "Connected to: " + destId;
+                            console.log("Connected to: " + destId)
+                            ready();
+                        });
+                    });
+                };
+
+                function addMessage(msg) {
+                    var now = new Date();
+                    var h = now.getHours();
+                    var m = addZero(now.getMinutes());
+                    var s = addZero(now.getSeconds());
+
+                    if (h > 12)
+                        h -= 12;
+                    else if (h === 0)
+                        h = 12;
+
+                    function addZero(t) {
+                        if (t < 10)
+                            t = "0" + t;
+                        return t;
+                    };
+
+                    message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
+                };
+
+                function clearMessages() {
+                    message.innerHTML = "";
+                    addMessage("Msgs cleared");
+                };
+
+                if (conn) {
+                    ready()
+                }
+                else {
+                    join()
+                };
+            })();
+        </script>
+    </body>
+</html>
