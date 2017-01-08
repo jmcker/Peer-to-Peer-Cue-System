@@ -2,7 +2,7 @@
 
 ### What is this repository for? ###
 
-* Cue system for two way communication using WebRTC technology.
+* Cue system for simple two-way communication using WebRTC technology.
 * v1.0
 
 ### How do I get set up? ###
