@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width">
+        <title>Street Scenes - Remote Cue - Shuttle</title>
+        <link rel="stylesheet" href="assets/css/style.css">
+    </head>
+    <body>
+        <table class="display">
+            <tr>
+                <td class="title">Status:</td>
+                <td class="title">Messages:</td>
+            </tr>
+            <tr>
+                <td><div id="status" style="font-weight: bold;"></div></td>
+                <td>
+                    <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
+                    <button type="button" id="sendButton">Send</button>
+                    <button type="button" id="clearMsgsButton">Clear Msgs</button>
+                </td>
+            </tr>
+            <tr>
+                <td><div class="status"></div></td>
+                <td><div class="message" id="message"></div></td>
+            </tr>
+            <tr>
+                <td class="display-box wait" id="wait"><h2>Wait</h2></td>
+                <td class="display-box hidden" id="go"><h2>Go</h2></td>
+            </tr>
+            <tr>
+                <td class="display-box hidden" id="fade"><h2>Fade</h2></td>
+                <td class="display-box hidden" id="off"><h2>All Off</h2></td>
+            </tr>
+        </table>
+
+        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+        <script type="text/javascript">
+            (function () {
+                var id = '1'
+
+                var peer = null;
+                var peerId = null;
+                var conn = null;
+                var oppositePeer = {
+                    peerId: null
+                };
+                var msg = null;
+                var status = document.getElementById("status");
+                var message = document.getElementById("message");
+                var waitBox = document.getElementById("wait");
+                var goBox = document.getElementById("go");
+                var fadeBox = document.getElementById("fade");
+                var offBox = document.getElementById("off");
+                var sendMessageBox = document.getElementById("sendMessageBox");
+                var sendButton = document.getElementById("sendButton");
+                var clearMsgsButton = document.getElementById("clearMsgsButton");
+
+                function ready() {
+                    conn.on('data', function (data) {
+                        console.log("Data recieved");
+                        var cueString = "<span class=\"cueMsg\">Cue: </span>";
+                        switch (data) {
+                            case 'Go':
+                                go();
+                                addMessage(cueString + data);
+                                break;
+                            case 'Fade':
+                                fade();
+                                addMessage(cueString + data);
+                                break;
+                            case 'Off':
+                                off();
+                                addMessage(cueString + data);
+                                break;
+                            case 'Reset':
+                                reset();
+                                addMessage(data);
+                                break;
+                            default:
+                                addMessage("<span class=\"soundMsg\">Sound: </span>" + data);
+                                break;
+                        };
+                    });
+                    conn.on('close', function () {
+                        status.innerHTML = "Connection reset<br>Awaiting connection...";
+                        conn = null;
+                        start(true);
+                    });
+                    peer.on('disconnected', function () {
+                        alert("Connection has been lost.");
+                        peer.reconnect();
+                    });
+                    peer.on('error', function (err) {
+                        alert('' + err)
+                    });
+
+                    // Listen for enter
+                    sendMessageBox.onkeypress = function (e) {
+                        var event = e || window.event;
+                        var char = event.which || event.keyCode;
+                        if (char == '13')
+                            sendButton.click();
+                    };
+                    // Send message
+                    sendButton.onclick = function () {
+                        msg = sendMessageBox.value;
+                        sendMessageBox.value = "";
+                        conn.send(msg);
+                        console.log("Sent: " + msg)
+                        addMessage("<span class=\"shuttleMsg\">Shuttle: </span>" + msg);
+                    };
+                    // Clear messages box
+                    clearMsgsButton.onclick = function () {
+                        clearMessages();
+                    };
+                }
+
+                function initialize() {
+                    peer = new Peer(id, {
+                        key: 'iw23v27zu4qme7b9',
+                        debug: 2
+                    });
+
+                    peer.on('open', function (id) {
+                        peerId = id;
+                        console.log('ID: ' + id);
+                    });
+                    peer.on('error', function (err) {
+                        if (err.type === 'unavailable-id') {
+                            alert('' + err);
+                            peer.reconnect();
+                        }
+                        else
+                            alert('' + err);
+                    });
+                };
+
+                function start(noInitialize) {
+                    if (noInitialize)
+                        reset();
+                    else
+                        initialize();
+
+                    peer.on('open', function () {
+                        status.innerHTML = "Awaiting connection...";
+                    });
+                    peer.on('connection', function (c) {
+                        if (conn) {
+                            c.close();
+                            c.send("Already connected...");
+                            return
+                        }
+                        conn = c;
+                        console.log("Connected.");
+                        status.innerHTML = "Connected";
+                        ready()
+                    });
+                }
+
+                function go() {
+                    waitBox.className = "display-box hidden";
+                    goBox.className = "display-box go";
+                    fadeBox.className = "display-box hidden";
+                    offBox.className = "display-box hidden";
+                    return;
+                };
+
+                function fade() {
+                    waitBox.className = "display-box hidden";
+                    goBox.className = "display-box hidden";
+                    fadeBox.className = "display-box fade";
+                    offBox.className = "display-box hidden";
+                    return;
+                };
+
+                function off() {
+                    waitBox.className = "display-box hidden";
+                    goBox.className = "display-box hidden";
+                    fadeBox.className = "display-box hidden";
+                    offBox.className = "display-box off";
+                    return;
+                }
+
+                function reset() {
+                    waitBox.className = "display-box wait";
+                    goBox.className = "display-box hidden";
+                    fadeBox.className = "display-box hidden";
+                    offBox.className = "display-box hidden";
+                    clearMessages();
+                    return;
+                };
+
+                function addMessage(msg) {
+                    var now = new Date();
+                    var h = now.getHours();
+                    var m = addZero(now.getMinutes());
+                    var s = addZero(now.getSeconds());
+
+                    if (h > 12)
+                        h -= 12;
+                    else if (h === 0)
+                        h = 12;
+
+                    function addZero(t) {
+                        if (t < 10)
+                            t = "0" + t;
+                        return t;
+                    };
+
+                    message.innerHTML = "<br><span class=\"msg-time\">" + h + ":" + m + ":" + s + "</span>  -  " + msg + message.innerHTML;
+                }
+
+                function clearMessages() {
+                    message.innerHTML = "";
+                    addMessage("Msgs cleared");
+                }
+
+                if (conn) {
+                    ready()
+                }
+                else {
+                    start()
+                }
+            })();
+        </script>
+    </body>
+</html>
