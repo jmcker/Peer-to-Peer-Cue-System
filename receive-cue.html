@@ -78,7 +78,7 @@
                                 addMessage(data);
                                 break;
                             default:
-                                addMessage("<span class=\"soundMsg\">Sound: </span>" + data);
+                                addMessage("<span class=\"peerMsg\">Peer: </span>" + data);
                                 break;
                         };
                     });
@@ -108,7 +108,7 @@
                         sendMessageBox.value = "";
                         conn.send(msg);
                         console.log("Sent: " + msg)
-                        addMessage("<span class=\"shuttleMsg\">Shuttle: </span>" + msg);
+                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
                     };
                     // Clear messages box
                     clearMsgsButton.onclick = function () {
