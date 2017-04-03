@@ -82,7 +82,7 @@
                 function ready() {
                     // Recieve data
                     conn.on('data', function (data) {
-                        addMessage("<span class=\"shuttleMsg\">Shuttle:</span> " + data);
+                        addMessage("<span class=\"peerMsg\">Peer:</span> " + data);
                     });
 
                     // Handle close or error
@@ -137,7 +137,7 @@
                         sendMessageBox.value = "";
                         conn.send(msg);
                         console.log("Sent: " + msg)
-                        addMessage("<span class=\"soundMsg\">Sound:</span> " + msg);
+                        addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
                     };
                     // Clear messages box
                     clearMsgsButton.onclick = function () {
