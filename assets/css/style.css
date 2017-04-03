@@ -89,10 +89,10 @@ td {
     color: orange;
 }
 
-.soundMsg {
+.selfMsg {
     color: green;
 }
 
-.shuttleMsg {
+.peerMsg {
     color: red;
 }
