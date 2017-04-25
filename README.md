@@ -1,6 +1,6 @@
 # Peer-to-Peer Cue System #
 
-Cue system for simple two-way communication and cueing using WebRTC technology.
+Cue system for simple two-way communication and visual cueing using WebRTC technology.
 v1.0
 
 ### Setup ###
