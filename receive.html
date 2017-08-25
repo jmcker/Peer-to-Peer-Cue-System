@@ -3,8 +3,8 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width">
-        <title>Street Scenes - Remote Cue - Shuttle</title>
-        <link rel="stylesheet" href="assets/css/style.css">
+        <title>Peer-to-Peer Cue System --- Reciever</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <table class="display">
@@ -17,7 +17,7 @@
                 <td>
                     <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
                     <button type="button" id="sendButton">Send</button>
-                    <button type="button" id="clearMsgsButton">Clear Msgs</button>
+                    <button type="button" id="clearMsgsButton">Clear Msgs (Local)</button>
                 </td>
             </tr>
             <tr>
@@ -25,7 +25,7 @@
                 <td><div class="message" id="message"></div></td>
             </tr>
             <tr>
-                <td class="display-box wait" id="wait"><h2>Wait</h2></td>
+                <td class="display-box standby" id="standby"><h2>Standby</h2></td>
                 <td class="display-box hidden" id="go"><h2>Go</h2></td>
             </tr>
             <tr>
@@ -51,7 +51,7 @@
                 var msg = null;
                 var status = document.getElementById("status");
                 var message = document.getElementById("message");
-                var waitBox = document.getElementById("wait");
+                var standbyBox = document.getElementById("standby");
                 var goBox = document.getElementById("go");
                 var fadeBox = document.getElementById("fade");
                 var offBox = document.getElementById("off");
@@ -164,7 +164,7 @@
                 }
 
                 function go() {
-                    waitBox.className = "display-box hidden";
+                    standbyBox.className = "display-box hidden";
                     goBox.className = "display-box go";
                     fadeBox.className = "display-box hidden";
                     offBox.className = "display-box hidden";
@@ -172,7 +172,7 @@
                 };
 
                 function fade() {
-                    waitBox.className = "display-box hidden";
+                    standbyBox.className = "display-box hidden";
                     goBox.className = "display-box hidden";
                     fadeBox.className = "display-box fade";
                     offBox.className = "display-box hidden";
@@ -180,7 +180,7 @@
                 };
 
                 function off() {
-                    waitBox.className = "display-box hidden";
+                    standbyBox.className = "display-box hidden";
                     goBox.className = "display-box hidden";
                     fadeBox.className = "display-box hidden";
                     offBox.className = "display-box off";
@@ -188,11 +188,10 @@
                 }
 
                 function reset() {
-                    waitBox.className = "display-box wait";
+                    standbyBox.className = "display-box standby";
                     goBox.className = "display-box hidden";
                     fadeBox.className = "display-box hidden";
                     offBox.className = "display-box hidden";
-                    clearMessages();
                     return;
                 };
 

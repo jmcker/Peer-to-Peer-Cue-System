@@ -1,13 +1,15 @@
 # Peer-to-Peer Cue System #
 
 Cue system for simple two-way communication and visual cueing using WebRTC peer-to-peer connection.
-v1.0
+v2.0
 
 ### Setup ###
 
-1. Open receive-cue.html on the receiving device.
-2. Open send-cue.html on the sending device.
+1. Open receive.html on the receiving device.
+2. Open send.html on the sending device.
 3. Both should indicate a successful connection in the *Status* box.
+4. If send.html is opened before receive.html, connection will be unsuccessful. 
+5. Refresh send.html once receive.html is opened to connect.
 
 ### Features ###
 
@@ -29,4 +31,4 @@ I made the decision to build this using WebRTC because it was a pretty new and e
 
 
 ### Contact ###
-Jack McKernan <a href="mailto:jmcker@outlook.com" target="_blank">jmcker@outlook.com</a>
+Jack McKernan [jmcker@outlook.com](mailto:jmcker@outlook.com)

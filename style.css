@@ -1,6 +1,7 @@
 body {
     font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
     background-color: white;
+	min-width: 450px;
 }
 
 h1 {
@@ -14,6 +15,14 @@ h2 {
 
 td {
     width: 50%;
+}
+
+input {
+	margin-bottom: 5px;
+}
+
+a:visited{ 
+	color: blue; 
 }
 
 .display {
@@ -40,7 +49,7 @@ td {
     vertical-align: top;
 }
 
-.wait {
+.standby {
     background-color: red;
 }
 
