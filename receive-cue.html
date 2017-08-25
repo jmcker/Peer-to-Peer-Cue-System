@@ -37,12 +37,15 @@
         <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
         <script type="text/javascript">
             (function () {
-                var id = '1'
+                
+// CHANGE ID HERE
+                var id = 'test1'
+//
 
-                var peer = null;
+                var peer = null; // Own peer object
                 var peerId = null;
                 var conn = null;
-                var oppositePeer = {
+                var oppositePeer = { // Opposite peer object
                     peerId: null
                 };
                 var msg = null;
@@ -117,6 +120,8 @@
                 }
 
                 function initialize() {
+                    
+                    // Create own peer object with unique key for my PeerJS server
                     peer = new Peer(id, {
                         key: 'iw23v27zu4qme7b9',
                         debug: 2
