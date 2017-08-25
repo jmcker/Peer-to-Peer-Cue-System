@@ -17,7 +17,6 @@ The sender has access to buttons that send the standby, go, fade, and stop signa
 
 Both have access to a two-way messenger for additional communication.
 
-
 ### Current Limitations ###
 
 Because this system was only designed for a single active pair of users, the identifiers used for inital connection and handshake are hand-assigned. For a multi-user system, this would need to be adapted to generate random ids that could be communicated prior to inital connection. This could be achieved through a centralized database (i.e. username linked with a randomly generated key at each login), any pre-existing two-way communication protocol, or simply with local generation and instructions to communicate to the second party. For ideas and implementation, take a look at [this](https://www.html5rocks.com/en/tutorials/webrtc/basics/#toc-signaling).
