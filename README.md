@@ -12,7 +12,9 @@ v1.0
 ### Features ###
 
 The reciever has access to large indicators for standby, go, fade, and stop signals. 
+
 The sender has access to buttons that send the standby, go, fade, and stop signals, triggering the recievers indicators.
+
 Both have access to a two-way messenger for additional communication.
 
 
