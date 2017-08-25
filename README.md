@@ -16,9 +16,9 @@ Because this system was only designed for a single active pair of users, the ide
 
 Should either identifier indicate that it is already in use, nothing can be done until the hold should expires on the server within two days or so. In this projects current state and with only a single active pair of users, the only option to rectify this is to manually change the indentifiers on **both** the sending and recieving page.
 
-This error is especially prevalent when one user momentarily loses network connection. [PeerJS](http://peerjs.com/docs/) (handles indentifier pool and initial handshake before dropping to direct peer-to-peer) has documentation suggesting a method to recover from this. At the time that this project was under active development, however, this method was unsuccessful at restoring connection or removing the "in use" status of the identifier on the PeerJS servers. There were several reports that this was an error on PeerJS's end of things. The [PeerJS Repository](https://github.com/peers/peerjs) no longer appears to be under active development, so chances are this issue has not been resolved.
+This error is especially prevalent when one user momentarily loses network connection. [PeerJS](http://peerjs.com/docs/) (handles indentifier pool and initial handshake before dropping to direct peer-to-peer) has documentation suggesting a method to recover from this. At the time that this project was under active development, however, this method was unsuccessful at restoring connection or removing the "in use" status of the identifier on the PeerJS servers. There were several reports that error was on PeerJS's end of things. The [PeerJS Repository](https://github.com/peers/peerjs) no longer appears to be under active development, so chances are this issue has not been resolved.
 
-I made the decision to build this using WebRTC because it was a pretty new and exciting standard at the time. It worked pretty well, but there are a multitude of improvements that can be made to this little experiment. Best of luck to anyone who stumbles upon this!
+I made the decision to build this using WebRTC because it was a pretty new and exciting standard at the time. It worked well, but there are a multitude of improvements that can be made to this little experiment. Best of luck to anyone who stumbles upon this!
 
 
 ### Contact ###
