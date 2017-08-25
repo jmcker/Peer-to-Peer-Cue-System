@@ -15,4 +15,4 @@ Should either username indicate that it has already been taken, wait a day for t
 
 
 ### Contact ###
-* Jack McKernan ([jmcker@outlook.com](mailto:jmcker@outlook.com))
+Jack McKernan ([jmcker@outlook.com](mailto:jmcker@outlook.com))
