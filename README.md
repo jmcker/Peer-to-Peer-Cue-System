@@ -1,6 +1,6 @@
 # Peer-to-Peer Cue System #
 
-Cue system for simple two-way communication and visual cueing using WebRTC peer-to-peer connection.
+Cue system for simple two-way communication and visual signaling using WebRTC peer-to-peer connection.
 v2.0
 
 Demo: [http://jackmckernan.tk/open-development/peer-to-peer-cue-system/](http://jackmckernan.tk/open-development/peer-to-peer-cue-system/)
