@@ -34,12 +34,12 @@
             </tr>
         </table>
 
-        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
         <script type="text/javascript">
             (function () {
                 
 // CHANGE ID HERE
-                var id = 'test1'
+                var id = 'test1c4790c1'
 //
 
                 var peer = null; // Own peer object
@@ -121,9 +121,8 @@
 
                 function initialize() {
                     
-                    // Create own peer object with unique key for my PeerJS server
+                    // Create own peer object with connection to shared PeerJS server
                     peer = new Peer(id, {
-                        key: 'iw23v27zu4qme7b9',
                         debug: 2
                     });
 

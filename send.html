@@ -44,11 +44,11 @@
             </tr>
         </table>
 
-        <script src="http://cdn.peerjs.com/0.3/peer.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
         <script type="text/javascript">
             (function () {
-                var id = 'sender1'; // own id
-                var destId = 'test1'; // id of peer to connect to
+                var id = 'sender1c4790c1'; // own id
+                var destId = 'test1c4790c1'; // id of peer to connect to
 
                 var peer = null; // own peer object
                 var peerId = null;
@@ -148,9 +148,8 @@
                 };
 
                 function initialize() {
-                    // Create own peer object with key for my PeerJS server
+                    // Create own peer object with connection to shared PeerJS server
                     peer = new Peer(id, { 
-                        key: 'iw23v27zu4qme7b9', 
                         debug: 2 
                     });
 
@@ -172,9 +171,8 @@
                     initialize();
                     peer.on('open', function () {
                         
-                        // Create connection with key for my PeerJS server
+                        // Create connection to shared PeerJS server
                         conn = peer.connect(destId, {
-                            key: 'iw23v27zu4qme7b9',
                             reliable: true
                         });
                         conn.on('open', function () {
