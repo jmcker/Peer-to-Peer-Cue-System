@@ -13,7 +13,9 @@
                 <td class="title">Messages:</td>
             </tr>
             <tr>
-                <td><div id="status" style="font-weight: bold;"></div></td>
+                <td>
+                    <div id="receiver-id" style="font-weight: bold;" title="Copy this ID to the input on send.html.">ID:</div>
+                </td>
                 <td>
                     <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
                     <button type="button" id="sendButton">Send</button>
@@ -21,7 +23,7 @@
                 </td>
             </tr>
             <tr>
-                <td><div class="status"></div></td>
+                <td><div id="status" class="status"></div></td>
                 <td><div class="message" id="message"></div></td>
             </tr>
             <tr>
@@ -37,10 +39,6 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
         <script type="text/javascript">
             (function () {
-                
-// CHANGE ID HERE
-                var id = 'test1c4790c1'
-//
 
                 var peer = null; // Own peer object
                 var peerId = null;
@@ -49,6 +47,7 @@
                     peerId: null
                 };
                 var msg = null;
+                var recvId = document.getElementById("receiver-id");
                 var status = document.getElementById("status");
                 var message = document.getElementById("message");
                 var standbyBox = document.getElementById("standby");
@@ -122,7 +121,7 @@
                 function initialize() {
                     
                     // Create own peer object with connection to shared PeerJS server
-                    peer = new Peer(id, {
+                    peer = new Peer(null, {
                         debug: 2
                     });
 
@@ -147,12 +146,13 @@
                         initialize();
 
                     peer.on('open', function () {
+                        recvId.innerHTML = "ID: " + peer.id;
                         status.innerHTML = "Awaiting connection...";
                     });
                     peer.on('connection', function (c) {
                         if (conn) {
-                            c.close();
                             c.send("Already connected...");
+                            c.close();
                             return
                         }
                         conn = c;

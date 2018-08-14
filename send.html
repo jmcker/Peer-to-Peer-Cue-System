@@ -15,7 +15,11 @@
                 <td class="title">Messages:</td>
             </tr>
             <tr>
-                <td><div id="status" style="font-weight: bold;"></div></td>
+                <td>
+                    <span style="font-weight: bold">ID: </span>
+                    <input type="text" id="receiver-id" title="Input the ID from receive.html">
+                    <button id="connect-button">Connect</button>
+                </td>
                 <td>
                     <input type="text" id="sendMessageBox" placeholder="Enter a message..." autofocus="true" />
                     <button type="button" id="sendButton">Send</button>
@@ -23,7 +27,7 @@
                 </td>
             </tr>
             <tr>
-                <td><div class="status"></div></td>
+                <td><div id="status" class="status"></div></td>
                 <td><div class="message" id="message"></div></td>
             </tr>
             <tr>
@@ -47,8 +51,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.9/peer.min.js"></script>
         <script type="text/javascript">
             (function () {
-                var id = 'sender1c4790c1'; // own id
-                var destId = 'test1c4790c1'; // id of peer to connect to
+
+                var destId = "";
 
                 var peer = null; // own peer object
                 var peerId = null;
@@ -58,6 +62,7 @@
                 };
                 var msg = null;
                 var command = null;
+                var recvIdInput = document.getElementById("receiver-id");
                 var status = document.getElementById("status");
                 var message = document.getElementById("message");
                 var goButton = document.getElementById("goButton");
@@ -149,8 +154,8 @@
 
                 function initialize() {
                     // Create own peer object with connection to shared PeerJS server
-                    peer = new Peer(id, { 
-                        debug: 2 
+                    peer = new Peer(null, {
+                        debug: 2
                     });
 
                     peer.on('open', function (id) {
@@ -170,7 +175,17 @@
                 function join() {
                     initialize();
                     peer.on('open', function () {
+
+                        if (conn) {
+                            conn.close();
+                        }
+
+                        if (peer) {
+                            peer.destroy();
+                        }
                         
+                        destId = recvIdInput.value;
+
                         // Create connection to shared PeerJS server
                         conn = peer.connect(destId, {
                             reliable: true
@@ -210,10 +225,14 @@
                 };
 
                 if (conn) {
-                    ready()
+                    ready();
                 }
                 else {
-                    join()
+                    join();
+                }
+
+                document.getElementById("connect-button").onclick = function() {
+                    join();
                 };
             })();
         </script>
