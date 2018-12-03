@@ -155,6 +155,7 @@
                 function initialize() {
                     // Create own peer object with connection to shared PeerJS server
                     peer = new Peer(null, {
+                        secure: false,
                         debug: 2
                     });
 
@@ -183,7 +184,7 @@
                         if (peer) {
                             peer.destroy();
                         }
-                        
+
                         destId = recvIdInput.value;
 
                         // Create connection to shared PeerJS server
