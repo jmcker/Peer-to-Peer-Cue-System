@@ -3,7 +3,7 @@
 Cue system for simple two-way communication and visual signaling using a WebRTC peer-to-peer connection.
 This was initially designed for signaling on-stage actors during a theater performance.
 
-Demo: [http://jackmckernan.tk/open-development/peer-to-peer-cue-system/](http://jackmckernan.tk/open-development/peer-to-peer-cue-system/)
+Demo: https://jmcker.github.io/Peer-to-Peer-Cue-System
 
 [PeerJS examples](https://peerjs.com/examples)
 
@@ -23,7 +23,3 @@ The sender has access to buttons that send the standby, go, fade, and stop signa
 
 Both have access to a two-way messenger for additional communication.
 
-
-### Contact ###
-
-Jack McKernan [jmcker@outlook.com](mailto:jmcker@outlook.com)
