@@ -101,7 +101,7 @@
                         peer.reconnect();
                     });
                     peer.on('error', function (err) {
-                        alert('' + err)
+                        alert('' + err);
                     });
 
                     // Check URL for comamnds that should be sent right away
@@ -143,7 +143,7 @@
                         msg = sendMessageBox.value;
                         sendMessageBox.value = "";
                         conn.send(msg);
-                        console.log("Sent: " + msg)
+                        console.log("Sent: " + msg);
                         addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
                     };
                     // Clear messages box
@@ -176,14 +176,11 @@
                     initialize();
                     peer.on('open', function () {
 
+                        // Close old connection
                         if (conn) {
                             conn.close();
                         }
 
-                        if (peer) {
-                            peer.destroy();
-                        }
-                        
                         destId = recvIdInput.value;
 
                         // Create connection to shared PeerJS server
@@ -193,7 +190,7 @@
                         conn.on('open', function () {
                             oppositePeer.peerId = destId;
                             status.innerHTML = "Connected to: " + destId;
-                            console.log("Connected to: " + destId)
+                            console.log("Connected to: " + destId);
                             ready();
                         });
                     });

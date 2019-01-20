@@ -119,7 +119,7 @@
                 }
 
                 function initialize() {
-                    
+
                     // Create own peer object with connection to shared PeerJS server
                     peer = new Peer(null, {
                         debug: 2
@@ -153,12 +153,12 @@
                         if (conn) {
                             c.send("Already connected...");
                             c.close();
-                            return
+                            return;
                         }
                         conn = c;
                         console.log("Connected.");
                         status.innerHTML = "Connected";
-                        ready()
+                        ready();
                     });
                 }
 
@@ -220,10 +220,10 @@
                 }
 
                 if (conn) {
-                    ready()
+                    ready();
                 }
                 else {
-                    start()
+                    start();
                 }
             })();
         </script>
