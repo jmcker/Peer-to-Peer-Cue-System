@@ -40,13 +40,10 @@
         <script type="text/javascript">
             (function () {
 
+                var lastPeerId = null;
                 var peer = null; // Own peer object
                 var peerId = null;
                 var conn = null;
-                var oppositePeer = { // Opposite peer object
-                    peerId: null
-                };
-                var msg = null;
                 var recvId = document.getElementById("receiver-id");
                 var status = document.getElementById("status");
                 var message = document.getElementById("message");
@@ -58,6 +55,70 @@
                 var sendButton = document.getElementById("sendButton");
                 var clearMsgsButton = document.getElementById("clearMsgsButton");
 
+                /**
+                 * Create the Peer object for our end of the connection.
+                 *
+                 * Sets up callbacks that handle any events related to our
+                 * peer object.
+                 */
+                 function initialize() {
+                    // Create own peer object with connection to shared PeerJS server
+                    peer = new Peer(null, {
+                        debug: 2
+                    });
+
+                    peer.on('open', function (id) {
+                        // Workaround for peer.reconnect deleting previous id
+                        if (peer.id === null) {
+                            console.log('Received null id from peer open');
+                            peer.id = lastPeerId;
+                        } else {
+                            lastPeerId = peer.id;
+                        }
+
+                        console.log('ID: ' + peer.id);
+                        recvId.innerHTML = "ID: " + peer.id;
+                        status.innerHTML = "Awaiting connection...";
+                    });
+                    peer.on('connection', function (c) {
+                        // Allow only a single connection
+                        if (conn) {
+                            c.on('open', function() {
+                                c.send("Already connected to another client");
+                                setTimeout(function() { c.close(); }, 500);
+                            });
+                            return;
+                        }
+
+                        conn = c;
+                        console.log("Connected to: " + conn.peer);
+                        status.innerHTML = "Connected"
+                        ready();
+                    });
+                    peer.on('disconnected', function () {
+                        status.innerHTML = "Connection lost. Please reconnect";
+                        console.log('Connection lost. Please reconnect');
+
+                        // Workaround for peer.reconnect deleting previous id
+                        peer.id = lastPeerId;
+                        peer._lastServerId = lastPeerId;
+                        peer.reconnect();
+                    });
+                    peer.on('close', function() {
+                        conn = null;
+                        status.innerHTML = "Connection destroyed. Please refresh";
+                        console.log('Connection destroyed');
+                    });
+                    peer.on('error', function (err) {
+                        console.log(err);
+                        alert('' + err);
+                    });
+                };
+
+                /**
+                 * Triggered once a connection has been achieved.
+                 * Defines callbacks to handle incoming data and connection events.
+                 */
                 function ready() {
                     conn.on('data', function (data) {
                         console.log("Data recieved");
@@ -77,7 +138,7 @@
                                 break;
                             case 'Reset':
                                 reset();
-                                addMessage(data);
+                                addMessage(cueString + data);
                                 break;
                             default:
                                 addMessage("<span class=\"peerMsg\">Peer: </span>" + data);
@@ -88,77 +149,6 @@
                         status.innerHTML = "Connection reset<br>Awaiting connection...";
                         conn = null;
                         start(true);
-                    });
-                    peer.on('disconnected', function () {
-                        alert("Connection has been lost.");
-                        peer.reconnect();
-                    });
-                    peer.on('error', function (err) {
-                        alert('' + err)
-                    });
-
-                    // Listen for enter
-                    sendMessageBox.onkeypress = function (e) {
-                        var event = e || window.event;
-                        var char = event.which || event.keyCode;
-                        if (char == '13')
-                            sendButton.click();
-                    };
-                    // Send message
-                    sendButton.onclick = function () {
-                        msg = sendMessageBox.value;
-                        sendMessageBox.value = "";
-                        conn.send(msg);
-                        console.log("Sent: " + msg)
-                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
-                    };
-                    // Clear messages box
-                    clearMsgsButton.onclick = function () {
-                        clearMessages();
-                    };
-                }
-
-                function initialize() {
-
-                    // Create own peer object with connection to shared PeerJS server
-                    peer = new Peer(null, {
-                        debug: 2
-                    });
-
-                    peer.on('open', function (id) {
-                        peerId = id;
-                        console.log('ID: ' + id);
-                    });
-                    peer.on('error', function (err) {
-                        if (err.type === 'unavailable-id') {
-                            alert('' + err);
-                            peer.reconnect();
-                        }
-                        else
-                            alert('' + err);
-                    });
-                };
-
-                function start(noInitialize) {
-                    if (noInitialize)
-                        reset();
-                    else
-                        initialize();
-
-                    peer.on('open', function () {
-                        recvId.innerHTML = "ID: " + peer.id;
-                        status.innerHTML = "Awaiting connection...";
-                    });
-                    peer.on('connection', function (c) {
-                        if (conn) {
-                            c.send("Already connected...");
-                            c.close();
-                            return;
-                        }
-                        conn = c;
-                        console.log("Connected.");
-                        status.innerHTML = "Connected";
-                        ready();
                     });
                 }
 
@@ -219,12 +209,29 @@
                     addMessage("Msgs cleared");
                 }
 
-                if (conn) {
-                    ready();
-                }
-                else {
-                    start();
-                }
+                // Listen for enter
+                sendMessageBox.onkeypress = function (e) {
+                    var event = e || window.event;
+                    var char = event.which || event.keyCode;
+                    if (char == '13')
+                        sendButton.click();
+                };
+                // Send message
+                sendButton.onclick = function () {
+                    if (conn.open) {
+                        var msg = sendMessageBox.value;
+                        sendMessageBox.value = "";
+                        conn.send(msg);
+                        console.log("Sent: " + msg)
+                        addMessage("<span class=\"selfMsg\">Self: </span>" + msg);
+                    }
+                };
+                // Clear messages box
+                clearMsgsButton.onclick = function () {
+                    clearMessages();
+                };
+
+                initialize();
             })();
         </script>
     </body>
