@@ -5,7 +5,7 @@ This was initially designed for signaling on-stage actors during a theater perfo
 
 Demo: https://jmcker.github.io/Peer-to-Peer-Cue-System
 
-[PeerJS examples](https://peerjs.com/examples)
+[PeerJS examples](https://peerjs.com/examples.html)
 
 ### Setup ###
 
