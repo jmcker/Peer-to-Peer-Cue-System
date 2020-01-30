@@ -36,7 +36,7 @@
             </tr>
         </table>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.18/peer.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.0.4/peerjs.min.js"></script>
         <script type="text/javascript">
             (function () {
 
@@ -218,7 +218,7 @@
                 };
                 // Send message
                 sendButton.onclick = function () {
-                    if (conn.open) {
+                    if (conn && conn.open) {
                         var msg = sendMessageBox.value;
                         sendMessageBox.value = "";
                         conn.send(msg);
