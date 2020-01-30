@@ -172,6 +172,8 @@
                         conn.send(sigName);
                         console.log(sigName + " signal sent");
                         addMessage(cueString + sigName);
+                    } else {
+                        console.log('Connection is closed');
                     }
                 }
 
@@ -228,6 +230,8 @@
                         conn.send(msg);
                         console.log("Sent: " + msg);
                         addMessage("<span class=\"selfMsg\">Self: </span> " + msg);
+                    } else {
+                        console.log('Connection is closed');
                     }
                 };
                 // Clear messages box
