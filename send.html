@@ -91,6 +91,13 @@
 
                         console.log('ID: ' + peer.id);
                     });
+                    peer.on('connection', function (c) {
+                        // Disallow incoming connections
+                        c.on('open', function() {
+                            c.send("Sender does not accept incoming connections");
+                            setTimeout(function() { c.close(); }, 500);
+                        });
+                    });
                     peer.on('disconnected', function () {
                         status.innerHTML = "Connection lost. Please reconnect";
                         console.log('Connection lost. Please reconnect');
