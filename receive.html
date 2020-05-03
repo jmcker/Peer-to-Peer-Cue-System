@@ -148,7 +148,6 @@
                     conn.on('close', function () {
                         status.innerHTML = "Connection reset<br>Awaiting connection...";
                         conn = null;
-                        start(true);
                     });
                 }
 
@@ -209,15 +208,15 @@
                     addMessage("Msgs cleared");
                 }
 
-                // Listen for enter
-                sendMessageBox.onkeypress = function (e) {
+                // Listen for enter in message box
+                sendMessageBox.addEventListener('keypress', function (e) {
                     var event = e || window.event;
                     var char = event.which || event.keyCode;
                     if (char == '13')
                         sendButton.click();
-                };
+                });
                 // Send message
-                sendButton.onclick = function () {
+                sendButton.addEventListener('click', function () {
                     if (conn && conn.open) {
                         var msg = sendMessageBox.value;
                         sendMessageBox.value = "";
@@ -227,11 +226,10 @@
                     } else {
                         console.log('Connection is closed');
                     }
-                };
+                });
+
                 // Clear messages box
-                clearMsgsButton.onclick = function () {
-                    clearMessages();
-                };
+                clearMsgsButton.addEventListener('click', clearMessages);
 
                 initialize();
             })();

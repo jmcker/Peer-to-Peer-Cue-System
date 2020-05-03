@@ -177,18 +177,18 @@
                     }
                 }
 
-                goButton.onclick = function () {
+                goButton.addEventListener('click', function () {
                     signal("Go");
-                };
-                resetButton.onclick = function () {
+                });
+                resetButton.addEventListener('click', function () {
                     signal("Reset");
-                };
-                fadeButton.onclick = function () {
+                });
+                fadeButton.addEventListener('click', function () {
                     signal("Fade");
-                };
-                offButton.onclick = function () {
+                });
+                offButton.addEventListener('click', function () {
                     signal("Off");
-                };
+                });
 
                 function addMessage(msg) {
                     var now = new Date();
@@ -216,14 +216,14 @@
                 };
 
                 // Listen for enter in message box
-                sendMessageBox.onkeypress = function (e) {
+                sendMessageBox.addEventListener('keypress', function (e) {
                     var event = e || window.event;
                     var char = event.which || event.keyCode;
                     if (char == '13')
                         sendButton.click();
-                };
+                });
                 // Send message
-                sendButton.onclick = function () {
+                sendButton.addEventListener('click', function () {
                     if (conn && conn.open) {
                         var msg = sendMessageBox.value;
                         sendMessageBox.value = "";
@@ -233,11 +233,10 @@
                     } else {
                         console.log('Connection is closed');
                     }
-                };
+                });
+
                 // Clear messages box
-                clearMsgsButton.onclick = function () {
-                    clearMessages();
-                };
+                clearMsgsButton.addEventListener('click', clearMessages);
                 // Start peer connection on click
                 connectButton.addEventListener('click', join);
 
