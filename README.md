@@ -1,3 +1,5 @@
+<div style="white-space: pre;">
+
 # Peer-to-Peer Cue System #
 
 Cue system for simple two-way communication and visual signaling using a WebRTC peer-to-peer connection.
@@ -17,9 +19,10 @@ Demo: https://jmcker.github.io/Peer-to-Peer-Cue-System
 
 ### Features ###
 
-The receiver has access to large indicators for standby, go, fade, and stop signals. 
+The receiver has access to large indicators for standby, go, fade, and stop signals.
 
 The sender has access to buttons that send the standby, go, fade, and stop signals, triggering the receiver's indicators.
 
 Both have access to a two-way messenger for additional communication.
 
+</div>
